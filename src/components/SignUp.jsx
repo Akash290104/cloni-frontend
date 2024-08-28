@@ -39,23 +39,35 @@ const SignUp = () => {
     let hasError = false;
 
     if (!name.current.value) {
-      setErrors(prevErrors => ({ ...prevErrors, name: "Name is mandatory" }));
+      setErrors((prevErrors) => ({ ...prevErrors, name: "Name is mandatory" }));
       hasError = true;
     }
     if (!email.current.value) {
-      setErrors(prevErrors => ({ ...prevErrors, email: "Email is mandatory" }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        email: "Email is mandatory",
+      }));
       hasError = true;
     }
     if (!password.current.value) {
-      setErrors(prevErrors => ({ ...prevErrors, password: "Password is mandatory" }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        password: "Password is mandatory",
+      }));
       hasError = true;
     }
     if (!confirmPassword.current.value) {
-      setErrors(prevErrors => ({ ...prevErrors, confirmPassword: "Confirm password" }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmPassword: "Confirm password",
+      }));
       hasError = true;
     }
     if (password.current.value !== confirmPassword.current.value) {
-      setErrors(prevErrors => ({ ...prevErrors, confirmPassword: "Confirmed password must be the same as Password" }));
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        confirmPassword: "Confirmed password must be the same as Password",
+      }));
       hasError = true;
     }
 
@@ -71,7 +83,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "https://chat-app-3-jpcn.onrender.com/api/user/register",
+        "https://cloni-backend.onrender.com/api/user/register",
         formData,
         {
           headers: {
@@ -101,7 +113,7 @@ const SignUp = () => {
       } else {
         alert("Error while registering user");
       }
-      console.log("Error while registering fetching user",error);
+      console.log("Error while registering fetching user", error);
     }
   };
 
@@ -145,7 +157,9 @@ const SignUp = () => {
               {show1 ? "Hide" : "Show"}
             </button>
           </div>
-          {errors.password && <div className="text-danger">{errors.password}</div>}
+          {errors.password && (
+            <div className="text-danger">{errors.password}</div>
+          )}
         </div>
         <div className="form-group mt-2 mb-2">
           <label htmlFor="confirmPassword">Confirm Password</label>
@@ -161,7 +175,9 @@ const SignUp = () => {
               {show2 ? "Hide" : "Show"}
             </button>
           </div>
-          {errors.confirmPassword && <div className="text-danger">{errors.confirmPassword}</div>}
+          {errors.confirmPassword && (
+            <div className="text-danger">{errors.confirmPassword}</div>
+          )}
         </div>
         <div className="form-group mt-2 mb-2">
           <label htmlFor="picture">Choose display picture</label>
@@ -173,10 +189,7 @@ const SignUp = () => {
             ref={refPic}
           />
         </div>
-        <button
-          type="submit"
-          className="btn btn-primary mt-3 w-100"
-        >
+        <button type="submit" className="btn btn-primary mt-3 w-100">
           Sign Up
         </button>
       </form>

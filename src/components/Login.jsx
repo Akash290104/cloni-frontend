@@ -7,34 +7,32 @@ const Login = () => {
   const passwordElement = useRef();
   const navigate = useNavigate();
 
-
-
   const handleLogin = async (e) => {
     e.preventDefault();
-  
+
     if (!emailElement.current.value) {
       return;
     }
-  
+
     if (!passwordElement.current.value) {
       return;
     }
-  
+
     const email = emailElement.current.value;
     const password = passwordElement.current.value;
-  
+
     try {
       const response = await axios.post(
-        "https://chat-app-3-jpcn.onrender.com/api/user/login",
+        "https://cloni-backend.onrender.com/api/user/login",
         { email, password }
-      )
-  
+      );
+
       localStorage.setItem("userInfo", JSON.stringify(response.data));
       navigate("/chats");
-  
+
       emailElement.current.value = "";
       passwordElement.current.value = "";
-  
+
       // alert("User logged in successfully");
     } catch (error) {
       if (error.response) {
@@ -48,7 +46,7 @@ const Login = () => {
         alert("Error while logging in");
       }
     }
-  };  
+  };
 
   const handleGuest = async () => {
     emailElement.current.value = "guest123@gmail.com";
@@ -79,10 +77,7 @@ const Login = () => {
             placeholder="Password"
           />
         </div>
-        <button
-          type="submit"
-          className="btn btn-primary w-100 mt-3"
-        >
+        <button type="submit" className="btn btn-primary w-100 mt-3">
           Log In
         </button>
         <button
@@ -92,9 +87,7 @@ const Login = () => {
         >
           Get guest user credentials
         </button>
-      
       </form>
-     
     </div>
   );
 };

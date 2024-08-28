@@ -59,7 +59,7 @@ const MyChats = ({ fetchAgain }) => {
           },
         };
         const response = await axios.get(
-          "https://chat-app-3-jpcn.onrender.com/api/chat",
+          "https://cloni-backend.onrender.com/api/chat",
           config
         );
 
@@ -72,7 +72,7 @@ const MyChats = ({ fetchAgain }) => {
 
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  // }, [fetchAgain,]);
+    // }, [fetchAgain,]);
   }, [fetchAgain, chats, setChats, user]);
 
   const [groupChatModal, setGroupChatModal] = useState(false);

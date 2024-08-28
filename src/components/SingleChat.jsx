@@ -15,7 +15,7 @@ import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
 
-const ENDPOINT = "https://chat-app-3-jpcn.onrender.com";
+const ENDPOINT = "https://cloni-backend.onrender.com";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -47,11 +47,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     setOpenUpdateModal(false);
   };
 
-  const fetchMessages = useCallback( async () => {
+  const fetchMessages = useCallback(async () => {
     while (!user || !user.data || !user.data.token) {
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Polling with a small delay
     }
-    
 
     if (!user || !user.data || !user.data.token) {
       console.log("User not logged in or token missing");
@@ -73,7 +72,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       const chatId = selectedChat._id;
       const response = await axios.get(
-        `https://chat-app-3-jpcn.onrender.com/api/message/${chatId}`,
+        `https://cloni-backend.onrender.com/api/message/${chatId}`,
         config
       );
 
@@ -96,12 +95,12 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         alert("Error fetching messages");
       }
     }
-  }, [selectedChat, user])
+  }, [selectedChat, user]);
 
   useEffect(() => {
     fetchMessages();
     selectedChatCompare = selectedChat;
-  // }, [selectedChat]);
+    // }, [selectedChat]);
   }, [selectedChat, fetchMessages]);
 
   // console.log("Notification ", notification);
@@ -113,7 +112,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
-  // }, []);
+    // }, []);
   }, [user]);
 
   //Below logic ensures that users don't receive and see messages from a different chat while they're focused on a specific chat. It helps in managing the UI updates based on the selected chat.
@@ -267,7 +266,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     return () => {
       socket.off("message received");
     };
-  // }, []);
+    // }, []);
   }, [fetchAgain, setFetchAgain, notification, setNotification]);
 
   const sendMessage = async (event) => {
@@ -283,7 +282,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
         setNewMessage("");
         const response = await axios.post(
-          "https://chat-app-3-jpcn.onrender.com/api/message",
+          "https://cloni-backend.onrender.com/api/message",
           {
             content: newMessage,
             chatId: selectedChat._id,

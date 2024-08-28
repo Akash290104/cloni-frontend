@@ -56,7 +56,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.get(
-        `https://chat-app-3-jpcn.onrender.com/api/user?search=${searchTerm}`,
+        `https://cloni-backend.onrender.com/api/user?search=${searchTerm}`,
         config
       );
       setLoading(false);
@@ -88,7 +88,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.put(
-        "https://chat-app-3-jpcn.onrender.com/api/chat/addtogroup",
+        "https://cloni-backend.onrender.com/api/chat/addtogroup",
         { chatId: selectedChat._id, userId: selectedUser._id },
         config
       );
@@ -120,7 +120,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.put(
-        "https://chat-app-3-jpcn.onrender.com/api/chat/removefromgroup",
+        "https://cloni-backend.onrender.com/api/chat/removefromgroup",
         { chatId: selectedChat._id, userId: selectedUser._id },
         config
       );
@@ -158,7 +158,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.put(
-        "https://chat-app-3-jpcn.onrender.com/api/chat/rename",
+        "https://cloni-backend.onrender.com/api/chat/rename",
         { id: selectedChat._id, name: groupchatName },
         config
       );

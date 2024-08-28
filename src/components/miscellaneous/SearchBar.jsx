@@ -63,7 +63,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
       };
 
       const response = await axios.get(
-        `https://chat-app-3-jpcn.onrender.com/api/user?search=${search}`,
+        `https://cloni-backend.onrender.com/api/user?search=${search}`,
         config
       );
 
@@ -85,7 +85,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
         },
       };
       const response = await axios.get(
-        "https://chat-app-3-jpcn.onrender.com/api/chat",
+        "https://cloni-backend.onrender.com/api/chat",
         config
       );
 
@@ -110,7 +110,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
       };
 
       const response = await axios.post(
-        `https://chat-app-3-jpcn.onrender.com/api/chat`,
+        `https://cloni-backend.onrender.com/api/chat`,
         { userId },
         config
       );
