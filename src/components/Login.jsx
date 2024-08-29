@@ -28,6 +28,8 @@ const Login = () => {
       );
 
       localStorage.setItem("userInfo", JSON.stringify(response.data));
+      console.log(response?.data);
+      
       navigate("/chats");
 
       emailElement.current.value = "";

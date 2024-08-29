@@ -92,7 +92,9 @@ const SignUp = () => {
         }
       );
 
-      localStorage.setItem("userInfo", JSON.stringify(response));
+      localStorage.setItem("userInfo", JSON.stringify(response.data));
+      console.log(response?.data);
+      
       navigate("/chats");
 
       // Clear form fields
