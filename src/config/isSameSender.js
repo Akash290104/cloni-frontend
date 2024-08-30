@@ -32,5 +32,5 @@ export const isLastMessage = (messages, i, userId) => {
 };
 
 export const isCurrentUser = (m, user) => {
-  return m?.sender?._id === user.?.existingUser?._id;
+  return m?.sender?._id === user.existingUser?._id;
 };
