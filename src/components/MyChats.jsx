@@ -126,6 +126,19 @@ const MyChats = ({ fetchAgain }) => {
 
   const chatRef = useRef();
 
+  const ChatSender = ({ name, chat }) => {
+    return (
+      <div
+        ref={chatRef}
+        onClick={() => setSelectedChat(chat)}
+        className={`${styles.senderContainer} chatsender`}
+        style={{ backgroundColor: chat === selectedChat ? "#32afc6" : "grey" }}
+      >
+        {name}
+      </div>
+    );
+  };
+
   const fetchChats = useCallback(async () => {
     if (!user || !user.token) {
       console.log("User not logged in or token missing");
