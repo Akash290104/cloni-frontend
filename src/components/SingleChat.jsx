@@ -20,6 +20,15 @@ let socket;
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
+  
+    try {
+      if(user){
+        console.log(user);
+      }
+    } catch (error) {
+      console.log("User not fetched", error);
+    }
+
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -64,7 +73,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.error("Error fetching messages:", error);
       setLoading(false);
     }
-  }, [selectedChat, user.data.token]);
+  }, [selectedChat, user?.data.token]);
 
   useEffect(() => {
     const connectSocket = () => {
