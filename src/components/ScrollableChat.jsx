@@ -18,8 +18,8 @@ const ScrollableChat = ({ messages }) => {
             }}
             key={m._id}
           >
-            {(isSameSender(messages, m, i, user?.data?.existingUser?._id) ||
-              isLastMessage(messages, i, user?.data?.existingUser?._id)) && (
+            {(isSameSender(messages, m, i, user.?.existingUser?._id) ||
+              isLastMessage(messages, i, user.?.existingUser?._id)) && (
               <div
                 style={{
                   width: "45px",

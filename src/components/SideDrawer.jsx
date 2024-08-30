@@ -17,7 +17,7 @@ const SideDrawer = () => {
   let pic = "";
 
   try {
-    pic = user?.data?.existingUser?.pic;
+    pic = user.?.existingUser?.pic;
   } catch (error) {
     console.log("Error in providing pic", error);
   }

@@ -58,7 +58,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user?.data.token}`,
+          Authorization: `Bearer ${user..token}`,
         },
       };
 
