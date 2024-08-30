@@ -21,13 +21,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
   
-    try {
-      if(user){
-        console.log(user);
-      }
-    } catch (error) {
-      console.log("User not fetched", error);
-    }
+    console.log(user);
+    
 
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
