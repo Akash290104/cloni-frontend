@@ -50,7 +50,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
 
