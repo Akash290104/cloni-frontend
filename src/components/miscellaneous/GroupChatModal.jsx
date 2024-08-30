@@ -38,7 +38,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
     setLoading(true);
     const config = {
       headers: {
-        Authorization: `Bearer ${user.data.token}`,
+        Authorization: `Bearer ${user.token}`,
       },
     };
 
@@ -81,7 +81,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
 

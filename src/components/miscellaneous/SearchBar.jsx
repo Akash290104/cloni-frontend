@@ -81,7 +81,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const response = await axios.get(
@@ -105,7 +105,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
 

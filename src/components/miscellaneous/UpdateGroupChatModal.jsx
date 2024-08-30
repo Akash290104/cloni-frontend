@@ -52,7 +52,7 @@ const UpdateGroupChatModal = ({
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const response = await axios.get(
@@ -75,7 +75,7 @@ const UpdateGroupChatModal = ({
       return;
     }
 
-    if (selectedChat.groupAdmin._id !== user.data.existingUser._id) {
+    if (selectedChat.groupAdmin._id !== user.existingUser._id) {
       alert("Unauthorized access. Only admin can add or remove members");
       return;
     }
@@ -84,7 +84,7 @@ const UpdateGroupChatModal = ({
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const response = await axios.put(
@@ -105,8 +105,8 @@ const UpdateGroupChatModal = ({
 
   const handleRemoveUser = async (selectedUser) => {
     if (
-      selectedChat.groupAdmin._id !== user.data.existingUser._id &&
-      selectedUser._id !== user.data.existingUser._id
+      selectedChat.groupAdmin._id !== user.existingUser._id &&
+      selectedUser._id !== user.existingUser._id
     ) {
       alert("Unauthorized access. Only admin can remove members.");
       return;
@@ -116,7 +116,7 @@ const UpdateGroupChatModal = ({
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const response = await axios.put(
@@ -125,7 +125,7 @@ const UpdateGroupChatModal = ({
         config
       );
 
-      if (selectedUser._id === user.data.existingUser._id) {
+      if (selectedUser._id === user.existingUser._id) {
         alert(`You are leaving the group ${selectedChat.chatName}`);
         setSelectedChat();
         hideUpdateModal();
@@ -154,7 +154,7 @@ const UpdateGroupChatModal = ({
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.data.token}`,
+          Authorization: `Bearer ${user.token}`,
         },
       };
       const response = await axios.put(

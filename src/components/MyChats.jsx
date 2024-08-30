@@ -44,18 +44,18 @@ const MyChats = ({ fetchAgain }) => {
 
   useEffect(() => {
     const fetchChats = async () => {
-      while (!user || !user.data || !user.data.token) {
+      while (!user || !user || !user.token) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // Polling with a small delay
       }
 
-      if (!user || !user.data || !user.data.token) {
+      if (!user || !user || !user.token) {
         console.log("User not logged in or token missing");
         return;
       }
       try {
         const config = {
           headers: {
-            Authorization: `Bearer ${user.data.token}`,
+            Authorization: `Bearer ${user.token}`,
           },
         };
         const response = await axios.get(

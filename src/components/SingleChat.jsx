@@ -20,8 +20,8 @@ let socket;
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
-  
-    console.log(user.token);
+
+  console.log(user.token);
 
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -116,7 +116,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.disconnect();
       }
     };
-  }, [user, notification, setNotification, fetchAgain, setFetchAgain, messages, selectedChat]);
+  }, [
+    user,
+    notification,
+    setNotification,
+    fetchAgain,
+    setFetchAgain,
+    messages,
+    selectedChat,
+  ]);
 
   useEffect(() => {
     fetchMessages();
@@ -139,7 +147,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         const config = {
           headers: {
             "Content-type": "application/json",
-            Authorization: `Bearer ${user.data.token}`,
+            Authorization: `Bearer ${user.token}`,
           },
         };
         setNewMessage("");
