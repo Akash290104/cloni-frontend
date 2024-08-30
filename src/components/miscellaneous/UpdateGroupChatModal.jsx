@@ -70,7 +70,7 @@ const UpdateGroupChatModal = ({
   }, 500);
 
   const handleAddUser = async (selectedUser) => {
-    if (selectedChat.users.find((u) => u._id === selecteduser?._id)) {
+    if (selectedChat.users.find((u) => u._id === selectedUser?._id)) {
       alert("Selected user is already a member of the group");
       return;
     }
@@ -89,7 +89,7 @@ const UpdateGroupChatModal = ({
       };
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/addtogroup",
-        { chatId: selectedChat._id, userId: selecteduser?._id },
+        { chatId: selectedChat._id, userId: selectedUser?._id },
         config
       );
       setSelectedChat(response.data.added);
@@ -106,7 +106,7 @@ const UpdateGroupChatModal = ({
   const handleRemoveUser = async (selectedUser) => {
     if (
       selectedChat.groupAdmin._id !== user?.existinguser?._id &&
-      selecteduser?._id !== user?.existinguser?._id
+      selectedUser?._id !== user?.existinguser?._id
     ) {
       alert("Unauthorized access. Only admin can remove members.");
       return;
@@ -121,11 +121,11 @@ const UpdateGroupChatModal = ({
       };
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/removefromgroup",
-        { chatId: selectedChat._id, userId: selecteduser?._id },
+        { chatId: selectedChat._id, userId: selectedUser?._id },
         config
       );
 
-      if (selecteduser?._id === user?.existinguser?._id) {
+      if (selectedUser?._id === user?.existinguser?._id) {
         alert(`You are leaving the group ${selectedChat.chatName}`);
         setSelectedChat();
         hideUpdateModal();
