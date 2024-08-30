@@ -21,8 +21,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
   
-    console.log(user);
-    
+    console.log(user.data.token);
 
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
