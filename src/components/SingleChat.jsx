@@ -67,7 +67,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.error("Error fetching messages:", error);
       setLoading(false);
     }
-  }, [selectedChat, user?.data]);
+  }, [selectedChat, user?.token]);
 
   useEffect(() => {
     const connectSocket = () => {
