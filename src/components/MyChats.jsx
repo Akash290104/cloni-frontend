@@ -160,7 +160,7 @@ const MyChats = ({ fetchAgain }) => {
     } catch (error) {
       console.log("Error fetching the chats of the logged in user", error);
     }
-  }, [user, setChats]); // Use `user` and `setChats` as dependencies
+  }, [user, chats, setChats]); // Use `user` and `setChats` as dependencies
 
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
