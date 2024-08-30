@@ -28,11 +28,11 @@ export const User = ({ user, handleFunction }) => {
   return (
     <div className={styles.customUser} onClick={handleFunction}>
       <div className={styles.pic}>
-        <img src={user.pic} alt="User" />
+        <img src={user?.pic} alt="User" />
       </div>
       <div className={styles.details}>
-        <div className={styles.name}>{user.name}</div>
-        <div className={styles.mail}>{user.email}</div>
+        <div className={styles.name}>{user?.name}</div>
+        <div className={styles.mail}>{user?.email}</div>
       </div>
     </div>
   );
@@ -58,7 +58,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
 
@@ -81,7 +81,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
       const response = await axios.get(
@@ -105,7 +105,7 @@ const SearchBar = ({ isVisible, setIsVisible }) => {
       const config = {
         headers: {
           "Content-type": "application/json",
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
 

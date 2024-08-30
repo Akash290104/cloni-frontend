@@ -44,18 +44,18 @@ const MyChats = ({ fetchAgain }) => {
 
   useEffect(() => {
     const fetchChats = async () => {
-      while (!user || !user.token) {
+      while (!user || !user?.token) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // Polling with a small delay
       }
 
-      if (!user || !user.token) {
+      if (!user || !user?.token) {
         console.log("User not logged in or token missing");
         return;
       }
       try {
         const config = {
           headers: {
-            Authorization: `Bearer ${user.token}`,
+            Authorization: `Bearer ${user?.token}`,
           },
         };
         const response = await axios.get(
@@ -112,7 +112,6 @@ const MyChats = ({ fetchAgain }) => {
 export default MyChats;
 */
 
-
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { ChatState } from "../context/chatProvider";
 import axios from "axios";
@@ -140,14 +139,14 @@ const MyChats = ({ fetchAgain }) => {
   };
 
   const fetchChats = useCallback(async () => {
-    if (!user || !user.token) {
+    if (!user || !user?.token) {
       console.log("User not logged in or token missing");
       return;
     }
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
       const response = await axios.get(

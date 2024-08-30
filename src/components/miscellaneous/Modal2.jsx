@@ -15,11 +15,11 @@ const Modal2 = ({ handleClose, user }) => {
         </div>
         <div className={styles.content}>
           <div className={styles.profilePic}>
-            <img className={styles.dp} src={`${user.pic}`} alt="User" />
+            <img className={styles.dp} src={`${user?.pic}`} alt="User" />
           </div>
-          <div className= {styles.details}>
-            <p>Name : {user.name}</p>
-            <p>Email : {user.email}</p>
+          <div className={styles.details}>
+            <p>Name : {user?.name}</p>
+            <p>Email : {user?.email}</p>
           </div>
         </div>
       </div>

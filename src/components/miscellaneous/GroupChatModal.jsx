@@ -21,7 +21,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
 
     setSelectedUsers((prevSelectedUsers) => {
       const updatedSelectedUsers = prevSelectedUsers || [];
-      if (!updatedSelectedUsers.find((a) => a._id === user._id)) {
+      if (!updatedSelectedUsers.find((a) => a._id === user?._id)) {
         return [...updatedSelectedUsers, user];
       }
       return updatedSelectedUsers;
@@ -38,7 +38,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
     setLoading(true);
     const config = {
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${user?.token}`,
       },
     };
 
@@ -64,7 +64,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
 
   const handleDelete = (user) => {
     console.log("User removed from selected users");
-    setSelectedUsers(selectedUsers.filter((a) => a._id !== user._id));
+    setSelectedUsers(selectedUsers.filter((a) => a._id !== user?._id));
     console.log(selectedUsers);
   };
 
@@ -81,7 +81,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
 
@@ -145,7 +145,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
             ? selectedUsers.map((user) => (
                 <UserBadge
                   user={user}
-                  key={user._id}
+                  key={user?._id}
                   handleFunction={() => handleDelete(user)}
                 />
               ))
@@ -158,7 +158,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
             searchResult.map((user) => (
               <User
                 user={user}
-                key={user._id}
+                key={user?._id}
                 handleFunction={() => handleFunction(user)}
               />
             ))

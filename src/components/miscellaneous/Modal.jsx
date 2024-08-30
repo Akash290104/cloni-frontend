@@ -17,13 +17,13 @@ const Modal = ({ handleClose, user }) => {
           <div className={styles.profilePic}>
             <img
               className={styles.dp}
-              src={`${user.existingUser.pic}`}
+              src={`${user?.existinguser?.pic}`}
               alt="User"
             />
           </div>
           <div className={styles.details}>
-            <p>Name : {user.existingUser.name}</p>
-            <p>Email : {user.existingUser.email}</p>
+            <p>Name : {user?.existinguser?.name}</p>
+            <p>Email : {user?.existinguser?.email}</p>
           </div>
         </div>
       </div>

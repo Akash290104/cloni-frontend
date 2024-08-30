@@ -10,8 +10,7 @@ export const isSameSender = (messages, m, i, userId) => {
     // i < messages.length - 1 &&
     // messages[i + 1]?.sender?._id !== m.sender?._id &&
     // m.sender?._id !== userId
-    i < messages.length - 1 &&
-    messages[i + 1]?.sender?._id !== m.sender?._id
+    i < messages.length - 1 && messages[i + 1]?.sender?._id !== m.sender?._id
   );
 };
 
@@ -28,9 +27,9 @@ export const isLastMessage = (messages, i, userId) => {
     // messages[messages.length - 1]?.sender?._id &&
     // messages[messages.length - 1]?.sender?._id !== userId
     i === messages.length - 1
-  )
+  );
 };
 
 export const isCurrentUser = (m, user) => {
-  return m?.sender?._id === user.existingUser?._id;
+  return m?.sender?._id === user?.existingUser?._id;
 };

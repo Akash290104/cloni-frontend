@@ -1,6 +1,6 @@
 import React from "react";
 import { GrFormView } from "react-icons/gr";
-import styles from "../../styling/profilemodal.module.scss"
+import styles from "../../styling/profilemodal.module.scss";
 // export const Modal = ({handleClose}) => {
 //   return (
 //     <div className={styles.container}>
@@ -12,8 +12,8 @@ import styles from "../../styling/profilemodal.module.scss"
 //       </div>
 //       <div className={styles.content}>
 //         <p>SHAH RUKH KHAN</p>
-//         {/* <p>Name : {user.name}</p>
-//           <p>Email : {user.email}</p> */}
+//         {/* <p>Name : {user?.name}</p>
+//           <p>Email : {user?.email}</p> */}
 //       </div>
 //     </div>
 //   );
@@ -26,7 +26,7 @@ const Profilemodal = ({ onClose, onOpen, children, profile }) => {
         <span onClick={onOpen}>{children}</span>
       ) : (
         <div onClick={onOpen} className={styles.viewIcon}>
-          <GrFormView/>
+          <GrFormView />
         </div>
       )}
       {/* <div className={styles.container}>
@@ -38,10 +38,10 @@ const Profilemodal = ({ onClose, onOpen, children, profile }) => {
         </div>
         <div className={styles.content}>
           <p>SHAH RUKH KHAN</p>
-          {/* <p>Name : {user.name}</p>
-           <p>Email : {user.email}</p> */}
-        {/* </div>
-      </div> */} 
+          {/* <p>Name : {user?.name}</p>
+           <p>Email : {user?.email}</p> */}
+      {/* </div>
+      </div> */}
     </>
   );
 };

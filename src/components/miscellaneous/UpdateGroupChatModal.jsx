@@ -8,7 +8,7 @@ import { debounce } from "../../config/debounce";
 const UserBadge = ({ user, handleFunction }) => (
   <div className={styles.badgecontainer}>
     <div className={styles.badgecontent}>
-      <div className={styles.badgename}>{user.name}</div>
+      <div className={styles.badgename}>{user?.name}</div>
       <div className={styles.badgeclose}>
         <button onClick={handleFunction}>X</button>
       </div>
@@ -19,11 +19,11 @@ const UserBadge = ({ user, handleFunction }) => (
 const User = ({ user, handleFunction }) => (
   <div className={styles.customUser} onClick={handleFunction}>
     <div className={styles.pic}>
-      <img src={user.pic} alt="User" />
+      <img src={user?.pic} alt="User" />
     </div>
     <div className={styles.details}>
-      <div className={styles.name1}>{user.name}</div>
-      <div className={styles.mail}>{user.email}</div>
+      <div className={styles.name1}>{user?.name}</div>
+      <div className={styles.mail}>{user?.email}</div>
     </div>
   </div>
 );
@@ -52,7 +52,7 @@ const UpdateGroupChatModal = ({
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
       const response = await axios.get(
@@ -70,12 +70,12 @@ const UpdateGroupChatModal = ({
   }, 500);
 
   const handleAddUser = async (selectedUser) => {
-    if (selectedChat.users.find((u) => u._id === selectedUser._id)) {
+    if (selectedChat.users.find((u) => u._id === selecteduser?._id)) {
       alert("Selected user is already a member of the group");
       return;
     }
 
-    if (selectedChat.groupAdmin._id !== user.existingUser._id) {
+    if (selectedChat.groupAdmin._id !== user?.existinguser?._id) {
       alert("Unauthorized access. Only admin can add or remove members");
       return;
     }
@@ -84,12 +84,12 @@ const UpdateGroupChatModal = ({
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/addtogroup",
-        { chatId: selectedChat._id, userId: selectedUser._id },
+        { chatId: selectedChat._id, userId: selecteduser?._id },
         config
       );
       setSelectedChat(response.data.added);
@@ -105,8 +105,8 @@ const UpdateGroupChatModal = ({
 
   const handleRemoveUser = async (selectedUser) => {
     if (
-      selectedChat.groupAdmin._id !== user.existingUser._id &&
-      selectedUser._id !== user.existingUser._id
+      selectedChat.groupAdmin._id !== user?.existinguser?._id &&
+      selecteduser?._id !== user?.existinguser?._id
     ) {
       alert("Unauthorized access. Only admin can remove members.");
       return;
@@ -116,16 +116,16 @@ const UpdateGroupChatModal = ({
       setLoading(true);
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/removefromgroup",
-        { chatId: selectedChat._id, userId: selectedUser._id },
+        { chatId: selectedChat._id, userId: selecteduser?._id },
         config
       );
 
-      if (selectedUser._id === user.existingUser._id) {
+      if (selecteduser?._id === user?.existinguser?._id) {
         alert(`You are leaving the group ${selectedChat.chatName}`);
         setSelectedChat();
         hideUpdateModal();
@@ -154,7 +154,7 @@ const UpdateGroupChatModal = ({
     try {
       const config = {
         headers: {
-          Authorization: `Bearer ${user.token}`,
+          Authorization: `Bearer ${user?.token}`,
         },
       };
       const response = await axios.put(
@@ -196,7 +196,7 @@ const UpdateGroupChatModal = ({
         <div className={styles.users}>
           {selectedChat.users.map((user) => (
             <UserBadge
-              key={user._id}
+              key={user?._id}
               user={user}
               handleFunction={() => handleRemoveUser(user)}
             />
@@ -236,7 +236,7 @@ const UpdateGroupChatModal = ({
           ) : searchResult.length > 0 ? (
             searchResult.map((user) => (
               <User
-                key={user._id}
+                key={user?._id}
                 user={user}
                 handleFunction={() => handleAddUser(user)}
               />
