@@ -109,7 +109,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     connectSocket();
 
     return () => {
-      if (socket) {
+      if (socket && socket.conected) {
         socket.disconnect();
       }
     };
