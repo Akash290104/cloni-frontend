@@ -78,6 +78,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         reconnection: true,
         reconnectionAttempts: 5,
         reconnectionDelay: 1000,
+        timeout: 10000
       });
 
       socket.on("connect", () => {
