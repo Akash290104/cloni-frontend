@@ -9,11 +9,12 @@ import { ChatState } from "../context/chatProvider";
 
 const ScrollableChat = ({ messages }) => {
   const { user } = ChatState();
+  
 
   return (
     <ScrollableFeed>
       {messages &&
-        messages.map((m, i) => (
+        messages?.messages?.map((m, i) => (
           <div
             style={{
               display: "flex",
