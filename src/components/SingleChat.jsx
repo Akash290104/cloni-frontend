@@ -117,7 +117,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.disconnect();
       }
     };
-  }, [user]);
+  }, [user, fetchAgain, messages, notification, selectedChat, setFetchAgain, setNotification]);
 
   useEffect(() => {
     fetchMessages();
