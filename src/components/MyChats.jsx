@@ -164,6 +164,7 @@ const MyChats = ({ fetchAgain }) => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
+    // eslint-disable-next-line
   }, [fetchAgain]); // Only re-run if `fetchAgain` or `fetchChats` changes
 
   const [groupChatModal, setGroupChatModal] = useState(false);
