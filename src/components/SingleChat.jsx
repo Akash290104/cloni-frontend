@@ -54,6 +54,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         },
       };
 
+      console.log("111");
+
       setLoading(true);
       const { data } = await axios.get(
         `${ENDPOINT}/api/message/${selectedChat._id}`,
@@ -80,6 +82,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         reconnectionDelay: 1000,
         timeout: 10000
       });
+      console.log("222");
 
       socket.on("connect", () => {
         console.log("Connected to socket.io");
@@ -126,6 +129,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   useEffect(() => {
     socket.on("typing", () => setIsTyping(true));
     socket.on("stop typing", () => setIsTyping(false));
+    console.log("333");
 
     return () => {
       socket.off("typing");
@@ -198,6 +202,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         removeNotification(selectedChat, prevNotification)
       );
     }
+    console.log("4444");
   }, [selectedChat, setNotification]);
 
   return (

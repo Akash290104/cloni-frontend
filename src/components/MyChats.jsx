@@ -164,7 +164,7 @@ const MyChats = ({ fetchAgain }) => {
   useEffect(() => {
     setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
-  }, [fetchAgain, fetchChats]); // Only re-run if `fetchAgain` or `fetchChats` changes
+  }, [fetchAgain]); // Only re-run if `fetchAgain` or `fetchChats` changes
 
   const [groupChatModal, setGroupChatModal] = useState(false);
 
