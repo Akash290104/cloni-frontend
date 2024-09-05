@@ -35,12 +35,12 @@ const SideDrawer = () => {
   const [profile, setProfile] = useState(false);
 
   const showProfile = () => {
-    console.log("showProfile");
+    // console.log("showProfile");
     setProfile(true);
   };
 
   const hideProfile = () => {
-    console.log("hideProfile");
+    // console.log("hideProfile");
     setProfile(false);
   };
 
@@ -68,6 +68,8 @@ const SideDrawer = () => {
     ? JSON.parse(storedNotification1)
     : notification;
 
+    console.log("stored notification", storedNotification);
+    
   const handleNotificationOnClick = (notif) => {
     setSelectedChat(notif.chat);
     setNotification(() => {

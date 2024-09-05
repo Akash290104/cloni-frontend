@@ -17,7 +17,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
   const { user, chats, setChats } = ChatState();
 
   const handleFunction = (user) => {
-    console.log(user);
+    // console.log(user);
 
     setSelectedUsers((prevSelectedUsers) => {
       const updatedSelectedUsers = prevSelectedUsers || [];
@@ -44,7 +44,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
 
     try {
       const response = await axios.get(
-        `https://cloni-backend.onrender.com/api/user?search=${query}`,
+        `http://localhost:5000/api/user?search=${query}`,
         config
       );
       setLoading(false);
@@ -53,7 +53,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
     } catch (error) {
       setLoading(false);
       alert("Error finding searched users for creating Group Chat");
-      console.log(error);
+      // console.log(error);
     }
   }, 500);
 
@@ -86,7 +86,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
       };
 
       const response = await axios.post(
-        "https://cloni-backend.onrender.com/api/chat/group",
+        "http://localhost:5000/api/chat/group",
         {
           name: groupChatName,
           users: JSON.stringify(selectedUsers.map((u) => u._id)),

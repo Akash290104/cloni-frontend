@@ -23,13 +23,13 @@ const Login = () => {
 
     try {
       const response = await axios.post(
-        "https://cloni-backend.onrender.com/api/user/login",
+        "http://localhost:5000/api/user/login",
         { email, password }
       );
 
       localStorage.setItem("userInfo", JSON.stringify(response.data));
       console.log(response?.data);
-      
+
       navigate("/chats");
 
       emailElement.current.value = "";

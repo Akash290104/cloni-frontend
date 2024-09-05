@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "../../styling/Modal.module.scss";
 
-const Modal2 = ({ handleClose, user }) => {
-  console.log("Modal user is ", user);
+const Modal2 = ({ user,  handleClose}) => {
+  console.log("Modal 2 user is ", user);
 
   return (
     <div className={styles.backdrop} onClick={handleClose}>
@@ -15,11 +15,11 @@ const Modal2 = ({ handleClose, user }) => {
         </div>
         <div className={styles.content}>
           <div className={styles.profilePic}>
-            <img className={styles.dp} src={`${user?.createdUser?.pic}`} alt="User" />
+            <img className={styles.dp} src={`${user?.pic}`} alt="User" />
           </div>
           <div className={styles.details}>
-            <p>Name : {user?.createdUser?.name}</p>
-            <p>Email : {user?.createdUser?.email}</p>
+            <p>Name : {user?.name}</p>
+            <p>Email : {user?.email}</p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-export const isSameSender = (messages, m, i, userId) => {
+export const isSameSender = (messages, m, i) => {
   if (!m?.sender) {
     console.warn(
       `Message at index ${i} is missing a sender or sender is undefined.`
@@ -14,7 +14,7 @@ export const isSameSender = (messages, m, i, userId) => {
   );
 };
 
-export const isLastMessage = (messages, i, userId) => {
+export const isLastMessage = (messages, i) => {
   if (!messages[i]?.sender) {
     console.warn(
       `Message at index ${i} is missing a sender or sender is undefined.`

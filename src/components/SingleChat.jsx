@@ -14,14 +14,16 @@ import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
 
-const ENDPOINT = "https://cloni-backend.onrender.com"; // Ensure this is HTTPS
+const ENDPOINT = "http://localhost:5000"; // Ensure this is HTTPS
 let socket;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { user, selectedChat, setSelectedChat, notification, setNotification } =
     ChatState();
 
-  console.log(user?.token);
+  console.log("selectedChat", selectedChat);
+
+  // console.log(user?.token);
 
   const [openModal, setOpenModal] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
@@ -55,13 +57,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       };
 
       console.log("111");
-
       setLoading(true);
       const { data } = await axios.get(
         `${ENDPOINT}/api/message/${selectedChat._id}`,
         config
       );
-      setMessages(data);
+
+      console.log("data of fetchmessages", data);
+
+      setMessages(data.messages);
       setLoading(false);
 
       socket.emit("join chat", selectedChat._id);
@@ -71,16 +75,25 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   }, [selectedChat, user?.token]);
 
+ 
+
   useEffect(() => {
+    const handleNotification=(newNotif)=>{
+      // console.log("chatttttiingg")
+      setNotification((prevNotification) => [...prevNotification, newNotif]);
+    }
+    
     const connectSocket = () => {
       socket = io(ENDPOINT, {
-        transports: ["websocket"],
+        transports: ["websocket", "polling"],
         secure: true,
         rejectUnauthorized: false,
         reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-        timeout: 10000
+        // reconnectionAttempts: 5,
+        // reconnectionDelay: 1000,
+        // timeout: 20000, // Set connection timeout
+        // pingTimeout: 60000, // Increase ping timeout to handle network latency
+        // upgrade: true,
       });
       console.log("222");
 
@@ -97,18 +110,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       socket.on("disconnect", (reason) => {
         console.log("Disconnected:", reason);
-        setSocketConnected(false);
+        if (reason === "io server disconnect") {
+          // The disconnection was initiated by the server, reconnect manually
+          socket.connect();
+        } else {
+          setSocketConnected(false);
+        }
       });
 
       socket.on("message received", (newMessageReceived) => {
-        if (!selectedChat || selectedChat._id !== newMessageReceived.chat._id) {
+        // console.log("message received", newMessageReceived);
+        console.log("selected chat when message received", selectedChat);
+
+        if (
+          !selectedChat ||
+          selectedChat?._id !== newMessageReceived?.newMessage?.chat?._id
+        ) {
           // Handle notification
-          if (!notification.some((n) => n._id === newMessageReceived._id)) {
-            setNotification([newMessageReceived, ...notification]);
+          console.log("notification step1", notification);
+
+          if (
+            !notification || !notification.some(
+              (n) => n._id === newMessageReceived.newMessage._id
+            )
+          ) {
+          console.log("notification step2", notification);
+           let newNotif = newMessageReceived?.newMessage
+           handleNotification(newNotif)
+            console.log("notification step3", notification);
             setFetchAgain(!fetchAgain);
+
           }
         } else {
-          setMessages([...messages, newMessageReceived]);
+          // console.log("messages list when message received", messages);
+          setMessages([...messages, newMessageReceived.newMessage]);
         }
       });
     };
@@ -120,7 +155,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.disconnect();
       }
     };
-  }, [user, fetchAgain, messages, notification, selectedChat, setFetchAgain, setNotification]);
+  }, [
+    user,
+    fetchAgain,
+    messages,
+    notification,
+    selectedChat,
+    setFetchAgain,
+    setNotification
+  ]);
 
   useEffect(() => {
     fetchMessages();
@@ -140,6 +183,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
       socket.emit("stop typing", selectedChat._id);
+      console.log("send-11");
       try {
         const config = {
           headers: {
@@ -147,6 +191,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             Authorization: `Bearer ${user?.token}`,
           },
         };
+        console.log("send-22");
         setNewMessage("");
         const { data } = await axios.post(
           `${ENDPOINT}/api/message`,
@@ -156,8 +201,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
+        console.log("send-33");
         socket.emit("new message", data);
-        setMessages([...messages, data]);
+        console.log("send-44");
+        const messagesList = messages;
+        // console.log("message list", messagesList);
+        // console.log("data", data);
+
+        setMessages([...messagesList, data.newMessage]);
+        console.log("all messages", messages);
       } catch (error) {
         console.error("Error sending message:", error);
       }
@@ -186,7 +238,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   };
 
   const removeNotification = (chat, notification) => {
-    const updatedNotification = notification.filter(
+    console.log("remove notification", notification);
+    const updatedNotification = notification?.filter(
       (notif) => notif.chat._id !== chat._id
     );
     localStorage.setItem(
@@ -202,7 +255,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         removeNotification(selectedChat, prevNotification)
       );
     }
-    console.log("4444");
+    // console.log("4444");
   }, [selectedChat, setNotification]);
 
   return (

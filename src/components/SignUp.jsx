@@ -83,7 +83,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "https://cloni-backend.onrender.com/api/user/register",
+        "http://localhost:5000/api/user/register",
         formData,
         {
           headers: {
@@ -93,8 +93,8 @@ const SignUp = () => {
       );
 
       localStorage.setItem("userInfo", JSON.stringify(response.data));
-      console.log(response?.data);
-      
+      // console.log(response?.data);
+
       navigate("/chats");
 
       // Clear form fields

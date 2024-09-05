@@ -59,7 +59,7 @@ const MyChats = ({ fetchAgain }) => {
           },
         };
         const response = await axios.get(
-          "https://cloni-backend.onrender.com/api/chat",
+          "http://localhost:5000/api/chat",
           config
         );
 
@@ -122,14 +122,26 @@ import GroupChatModal from "./miscellaneous/GroupChatModal";
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
-
+  
   const chatRef = useRef();
 
+  useEffect(() => {
+    console.log("Selected chat updated:", selectedChat);
+    // Additional logic when selectedChat changes, if needed
+  }, [selectedChat]);
+
   const ChatSender = ({ name, chat }) => {
+    // console.log("chat", chat);
+
+    const handleChatSelect=()=>{
+      // console.log("chatttttiingg")
+      setSelectedChat(chat);
+    }
+    
     return (
       <div
         ref={chatRef}
-        onClick={() => setSelectedChat(chat)}
+        onClick={handleChatSelect}
         className={`${styles.senderContainer} chatsender`}
         style={{ backgroundColor: chat === selectedChat ? "#32afc6" : "grey" }}
       >
@@ -150,12 +162,14 @@ const MyChats = ({ fetchAgain }) => {
         },
       };
       const response = await axios.get(
-        "https://cloni-backend.onrender.com/api/chat",
+        "http://localhost:5000/api/chat",
         config
       );
-
+      
+      // console.log(response.data.result);
       setChats(response.data.result);
-      console.log("Chats of MyChats component are", chats);
+      
+      // console.log("Chats of MyChats component are", chats);
     } catch (error) {
       console.log("Error fetching the chats of the logged in user", error);
     }
