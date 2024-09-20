@@ -121,34 +121,12 @@ import GroupChatModal from "./miscellaneous/GroupChatModal";
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState();
-  const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
-  
-  const chatRef = useRef();
+  const { user, chats, setChats } = ChatState();
 
-  useEffect(() => {
-    console.log("Selected chat updated:", selectedChat);
-    // Additional logic when selectedChat changes, if needed
-  }, [selectedChat]);
-
-  const ChatSender = ({ name, chat }) => {
-    // console.log("chat", chat);
-
-    const handleChatSelect=()=>{
-      // console.log("chatttttiingg")
-      setSelectedChat(chat);
-    }
-    
-    return (
-      <div
-        ref={chatRef}
-        onClick={handleChatSelect}
-        className={`${styles.senderContainer} chatsender`}
-        style={{ backgroundColor: chat === selectedChat ? "#32afc6" : "grey" }}
-      >
-        {name}
-      </div>
-    );
-  };
+  // useEffect(() => {
+  //   // console.log("Selected chat updated:", selectedChat);
+  //   // Additional logic when selectedChat changes, if needed
+  // }, [selectedChat]);
 
   const fetchChats = useCallback(async () => {
     if (!user || !user?.token) {
@@ -165,10 +143,10 @@ const MyChats = ({ fetchAgain }) => {
         "http://localhost:5000/api/chat",
         config
       );
-      
+
       // console.log(response.data.result);
       setChats(response.data.result);
-      
+
       // console.log("Chats of MyChats component are", chats);
     } catch (error) {
       console.log("Error fetching the chats of the logged in user", error);
@@ -199,14 +177,20 @@ const MyChats = ({ fetchAgain }) => {
           <button onClick={() => showGroupChatModal()}>New Group Chat +</button>
         </div>
       </div>
-      {chats.map((c) => {
-        if (c.isGroupChat) {
-          return <ChatSender key={c._id} name={c.chatName} chat={c} />;
-        } else {
-          const sender = GetSender(c, loggedUser);
-          return <ChatSender key={c._id} name={sender} chat={c} />;
-        }
-      })}
+      {chats.map(
+        (c) =>
+          c.isGroupChat ? (
+            <ChatSender key={c._id} name={c.chatName} chat={c} />
+          ) : (
+            <ChatSender key={c._id} name={GetSender(c, loggedUser)} chat={c} />
+          )
+        // if (c.isGroupChat) {
+        //   return <ChatSender key={c._id} name={c.chatName} chat={c} />;
+        // } else {
+        //   const sender = GetSender(c, loggedUser);
+        //   return <ChatSender key={c._id} name={sender} chat={c} />;
+        // }
+      )}
 
       {groupChatModal && (
         <GroupChatModal hideGroupChatModal={hideGroupChatModal} />
@@ -216,3 +200,27 @@ const MyChats = ({ fetchAgain }) => {
 };
 
 export default MyChats;
+
+const ChatSender = ({ name, chat }) => {
+  const chatRef = useRef();
+
+  const { selectedChat, setSelectedChat } = ChatState();
+  // console.log({ chat, selectedChat });
+
+  const handleChatSelect = () => {
+    setSelectedChat(chat); 
+  };
+
+  return (
+    <div
+      ref={chatRef}
+      onClick={handleChatSelect}
+      className={`${styles.senderContainer} chatsender`}
+      style={{
+        backgroundColor: chat._id === selectedChat._id ? "#32afc6" : "grey",
+      }}
+    >
+      {name}
+    </div>
+  );
+};

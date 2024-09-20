@@ -111,7 +111,7 @@ const SignUp = () => {
         error.response.data &&
         error.response.data.message
       ) {
-        alert(error.response.data.message); // Show the error message from the server
+        alert(error.response.data.message);
       } else {
         alert("Error while registering user");
       }

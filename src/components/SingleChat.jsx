@@ -1,27 +1,34 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState, useEffect, useRef } from "react";
 import { ChatState } from "../context/chatProvider";
 import styles from "../styling/SingleChat.module.scss";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 import { IoEye } from "react-icons/io5";
-import getSender from "../config/GetSender";
 import Modal2 from "./miscellaneous/Modal2.jsx";
 import GetSenderFull from "../config/GetSenderFull.js";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal.jsx";
 import { ChatLoading } from "./miscellaneous/SearchBar.jsx";
 import axios from "axios";
 import ScrollableChat from "./ScrollableChat.jsx";
-import io from "socket.io-client";
 import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
+import GetSender from "../config/GetSender";
 
-const ENDPOINT = "http://localhost:5000"; // Ensure this is HTTPS
-let socket;
+const ENDPOINT = "http://localhost:5000";
 
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { user, selectedChat, setSelectedChat, notification, setNotification } =
-    ChatState();
+const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
+  const {
+    user,
+    selectedChat,
+    setSelectedChat,
+    storedNotification,
+    setStoredNotification,
+  } = ChatState();
 
-  console.log("selectedChat", selectedChat);
+  // useEffect(() => {
+  //   console.log(selectedChat);
+  // }, [selectedChat]);
+
+  // console.log("selectedChat", selectedChat);
 
   // console.log(user?.token);
 
@@ -30,9 +37,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
-  const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+
+  const selectedChatRef = useRef(selectedChat);
+
+  useEffect(() => {
+    selectedChatRef.current = selectedChat;
+  }, [selectedChat]);
 
   const defaultOptions = {
     loop: true,
@@ -47,7 +59,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const hideUpdateModal = () => setOpenUpdateModal(false);
 
   const fetchMessages = useCallback(async () => {
-    if (!selectedChat) return;
+    if (Object.keys(selectedChat).length === 0) {
+      // console.log("Selected chat is undefined");
+      return;
+    }
+    // console.log("FetchmMessages being called");
 
     try {
       const config = {
@@ -56,16 +72,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         },
       };
 
-      console.log("111");
       setLoading(true);
+
+      console.log(selectedChat._id);
+
       const { data } = await axios.get(
         `${ENDPOINT}/api/message/${selectedChat._id}`,
         config
       );
 
-      console.log("data of fetchmessages", data);
+      // console.log("data of fetchmessages", data);
 
       setMessages(data.messages);
+
       setLoading(false);
 
       socket.emit("join chat", selectedChat._id);
@@ -73,16 +92,78 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.error("Error fetching messages:", error);
       setLoading(false);
     }
-  }, [selectedChat, user?.token]);
+  }, [selectedChat, user?.token, socket]);
 
- 
+  const handleNotification = (newNotif) => {
+    const storedNotification1 = localStorage.getItem("storedNotification");
+    const notifications = storedNotification1
+      ? JSON.parse(storedNotification1)
+      : [];
+    const temp = [...notifications, newNotif];
+    setStoredNotification(temp);
+    localStorage.setItem("storedNotification", JSON.stringify(temp));
+  };
 
   useEffect(() => {
-    const handleNotification=(newNotif)=>{
-      // console.log("chatttttiingg")
-      setNotification((prevNotification) => [...prevNotification, newNotif]);
+    // const storedNotification1 = localStorage.getItem("storedNotification");
+    // const notifications = storedNotification1
+    //   ? JSON.parse(storedNotification1)
+    //   : [];
+
+    // setStoredNotification((prev) => [...prev, ...notifications])
+
+    if (socket) {
+      socket.on("message received", (newMessageReceived) => {
+        // console.log("Message received step 1");
+        // console.log("Selected chat", selectedChat);
+        // console.log(selectedChat);
+
+        if (
+          Object.keys(selectedChatRef.current).length === 0 ||
+          selectedChatRef.current?._id !==
+            newMessageReceived?.newMessage?.chat?._id
+        ) {
+          // console.log({selectedChat,newMessageReceived})
+
+          if (
+            !storedNotification.some(
+              (n) => n._id === newMessageReceived?.newMessage?._id
+            )
+          ) {
+            console.log(
+              storedNotification.some(
+                (n) => n._id === newMessageReceived?.newMessage?._id
+              ),
+              storedNotification
+            );
+
+            let newNotif = newMessageReceived?.newMessage;
+            // console.log(storedNotification,newNotif)
+            handleNotification(newNotif);
+            // console.log("notification step2", storedNotification);
+            // setFetchAgain(!fetchAgain);
+            // }
+          } else {
+            return;
+          }
+        } else {
+          // console.log("messages list when message received", messages);
+          setMessages([...messages, newMessageReceived.newMessage]);
+        }
+      });
     }
-    
+  }, [socket, messages]);
+
+  /* useEffect(() => {
+    const handleNotification = (newNotif) => {
+      // console.log("chatttttiingg")
+      setNotification((prevNotification) => {
+        const temp = [...prevNotification, newNotif];
+        localStorage.setItem("storedNotification", JSON.stringify(temp));
+        return temp;
+      });
+    };
+
     const connectSocket = () => {
       socket = io(ENDPOINT, {
         transports: ["websocket", "polling"],
@@ -95,7 +176,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         // pingTimeout: 60000, // Increase ping timeout to handle network latency
         // upgrade: true,
       });
-      console.log("222");
 
       socket.on("connect", () => {
         console.log("Connected to socket.io");
@@ -120,27 +200,31 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
       socket.on("message received", (newMessageReceived) => {
         // console.log("message received", newMessageReceived);
-        console.log("selected chat when message received", selectedChat);
+
+        // console.log({ selectedChat, newMessageReceived });
+
+        console.log("Hello");
 
         if (
-          !selectedChat ||
+          !!selectedChat ||
           selectedChat?._id !== newMessageReceived?.newMessage?.chat?._id
         ) {
           // Handle notification
-          console.log("notification step1", notification);
+          // console.log("notification step1", notification);
 
-          if (
-            !notification || !notification.some(
-              (n) => n._id === newMessageReceived.newMessage._id
-            )
-          ) {
-          console.log("notification step2", notification);
-           let newNotif = newMessageReceived?.newMessage
-           handleNotification(newNotif)
-            console.log("notification step3", notification);
-            setFetchAgain(!fetchAgain);
-
-          }
+          // if (
+          //   !notification ||
+          //   !notification.some(
+          //     (n) => n._id === newMessageReceived?.newMessage?._id
+          //   )
+          // ) {
+          // console.log("notification step2", notification);
+          let newNotif = newMessageReceived?.newMessage;
+          console.log(newNotif);
+          handleNotification(newNotif);
+          // console.log("notification step3", notification);
+          // setFetchAgain(!fetchAgain);
+          // }
         } else {
           // console.log("messages list when message received", messages);
           setMessages([...messages, newMessageReceived.newMessage]);
@@ -162,28 +246,37 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     notification,
     selectedChat,
     setFetchAgain,
-    setNotification
-  ]);
+    setNotification,
+  ]);*/
 
   useEffect(() => {
     fetchMessages();
   }, [selectedChat, fetchMessages]);
 
   useEffect(() => {
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop typing", () => setIsTyping(false));
-    console.log("333");
+    if (socket) {
+      socket.on("typing", () => setIsTyping(true));
+      socket.on("stop typing", () => setIsTyping(false));
+      // console.log("333");
+    }
 
     return () => {
-      socket.off("typing");
-      socket.off("stop typing");
+      if (socket) {
+        socket.off("typing");
+        socket.off("stop typing");
+      }
     };
-  }, []);
+  }, [socket]);
 
   const sendMessage = async (event) => {
+    if (!socket) {
+      console.error("Socket not initialized");
+      return;
+    }
     if (event.key === "Enter" && newMessage) {
-      socket.emit("stop typing", selectedChat._id);
-      console.log("send-11");
+      console.log("Hello");
+      socket.emit("stop typing", selectedChat?._id);
+      // console.log("send-11");
       try {
         const config = {
           headers: {
@@ -191,7 +284,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             Authorization: `Bearer ${user?.token}`,
           },
         };
-        console.log("send-22");
+        // console.log("send-22");
         setNewMessage("");
         const { data } = await axios.post(
           `${ENDPOINT}/api/message`,
@@ -201,9 +294,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
-        console.log("send-33");
+        // console.log("send-33");
         socket.emit("new message", data);
-        console.log("send-44");
+        // console.log("send-44");
         const messagesList = messages;
         // console.log("message list", messagesList);
         // console.log("data", data);
@@ -237,34 +330,44 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }, timerLength);
   };
 
-  const removeNotification = (chat, notification) => {
-    console.log("remove notification", notification);
-    const updatedNotification = notification?.filter(
-      (notif) => notif.chat._id !== chat._id
-    );
-    localStorage.setItem(
-      "storedNotification",
-      JSON.stringify(updatedNotification)
-    );
-    return updatedNotification;
-  };
-
   useEffect(() => {
-    if (selectedChat) {
-      setNotification((prevNotification) =>
-        removeNotification(selectedChat, prevNotification)
+    const removeNotification = (chat) => {
+      // console.log("remove notification", notification);
+      const storedNotification1 = localStorage.getItem("storedNotification");
+      const notifications = storedNotification1
+        ? JSON.parse(storedNotification1)
+        : [];
+      const updatedNotification = notifications?.filter(
+        (notif) => notif.chat._id !== chat._id
       );
+
+      setStoredNotification(updatedNotification);
+
+      localStorage.setItem(
+        "storedNotification",
+        JSON.stringify(updatedNotification)
+      );
+    };
+
+    if (Object.keys(selectedChat).length > 0) {
+      removeNotification(selectedChat);
+      // console.log("4444");
+    } else {
+      return;
     }
-    // console.log("4444");
-  }, [selectedChat, setNotification]);
+  }, [selectedChat]);
 
   return (
     <div className={styles.container}>
-      {selectedChat ? (
+      {selectedChat && Object.keys(selectedChat).length !== 0 ? (
         <div className={styles.content}>
           <div className={styles.heading}>
             <div className={styles.arrow}>
-              <FaArrowAltCircleLeft onClick={() => setSelectedChat("")} />
+              <FaArrowAltCircleLeft
+                onClick={() => {
+                  setSelectedChat({});
+                }}
+              />
             </div>
             {selectedChat.isGroupChat ? (
               <div className={styles.chatTitle}>
@@ -272,7 +375,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             ) : (
               <div className={styles.chatTitle}>
-                {getSender(selectedChat, user)}
+                {GetSender(selectedChat, user)}
               </div>
             )}
             {!selectedChat.isGroupChat ? (
@@ -320,15 +423,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             )}
             <div className={styles.msgBox}>
               {isTyping ? (
-                <div>
-                  <Lottie
-                    options={defaultOptions}
-                    style={{
-                      marginBottom: "15px",
-                      marginLeft: "0px",
-                      width: "70px",
-                    }}
-                  />
+                <div
+                  style={{
+                    marginBottom: "15px",
+                    marginLeft: "0px",
+                    width: "70px",
+                  }}
+                >
+                  <Lottie options={defaultOptions} />
                 </div>
               ) : (
                 <></>

@@ -8,11 +8,13 @@ import Modal from "./miscellaneous/Modal.jsx";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./miscellaneous/SearchBar.jsx";
 import GetSender from "../config/GetSender.js";
+import { useEffect } from "react";
 
 const SideDrawer = () => {
   const navigate = useNavigate();
-  const { user, setSelectedChat, notification, setNotification } =
+  const { user, setSelectedChat, storedNotification, setStoredNotification } =
     ChatState();
+  // const [storedNotification, setStoredNotification] = useState([]);
 
   let pic = "";
 
@@ -54,9 +56,15 @@ const SideDrawer = () => {
     navigate("/");
   };
 
+  useEffect(() => {
+    const storedNotif = localStorage.getItem("storedNotification");
+    const notifications = storedNotif ? JSON.parse(storedNotif) : [];
+    setStoredNotification(notifications);
+  }, []);
+
+  /*
   let storedNotification1 = [];
   let storedNotification = [];
-
   // useEffect(() => {
   //   storedNotification1 = localStorage.getItem("storedNotification");
   //   storedNotification = storedNotification1
@@ -66,22 +74,37 @@ const SideDrawer = () => {
   storedNotification1 = localStorage.getItem("storedNotification");
   storedNotification = storedNotification1
     ? JSON.parse(storedNotification1)
-    : notification;
+    : [];
+console.log("Notification in sideDrawer");
+*/
 
-    console.log("stored notification", storedNotification);
-    
+  // console.log("stored notification", storedNotification);
+
+  // const handleNotificationOnClick = (notif) => {
+  //   setSelectedChat(notif.chat);
+  //   setNotification(() => {
+  //     const updatedNotifications = storedNotificationnotification.filter(
+  //       (n) => n._id !== notif._id
+  //     );
+  //     localStorage.setItem(
+  //       "storedNotification",
+  //       JSON.stringify(updatedNotifications)
+  //     );
+  //     return updatedNotifications;
+  //   });
+  // };
+
   const handleNotificationOnClick = (notif) => {
     setSelectedChat(notif.chat);
-    setNotification(() => {
-      const updatedNotifications = notification.filter(
-        (n) => n._id !== notif._id
-      );
-      localStorage.setItem(
-        "storedNotification",
-        JSON.stringify(updatedNotifications)
-      );
-      return updatedNotifications;
-    });
+    const updatedNotifications = storedNotification.filter(
+      (n) => n._id !== notif._id
+    );
+
+    setStoredNotification(updatedNotifications);
+    localStorage.setItem(
+      "storedNotification",
+      JSON.stringify(updatedNotifications)
+    );
   };
 
   return (
@@ -105,7 +128,6 @@ const SideDrawer = () => {
                 backgroundColor:
                   // notification.length === 0 ? "transparent" : "red",
                   storedNotification.length === 0 ? "transparent" : "red",
-
               }}
             >
               {storedNotification.length === 0 ? "" : storedNotification.length}
