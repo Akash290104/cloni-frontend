@@ -6,7 +6,7 @@ import ChatBox from "./ChatBox.jsx";
 import io from "socket.io-client";
 import { useContext } from "react";
 
-const ENDPOINT = "http://localhost:5000"; // Ensure this is HTTPS
+const ENDPOINT = "https://cloni-backend.onrender.com"; // Ensure this is HTTPS
 let socket;
 
 const Chatpage = () => {

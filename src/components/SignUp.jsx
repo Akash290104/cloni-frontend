@@ -83,7 +83,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/user/register",
+        "https://cloni-backend.onrender.com/api/user/register",
         formData,
         {
           headers: {

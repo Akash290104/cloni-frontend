@@ -56,7 +56,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.get(
-        `http://localhost:5000/api/user?search=${searchTerm}`,
+        `https://cloni-backend.onrender.com/api/user?search=${searchTerm}`,
         config
       );
       setLoading(false);
@@ -75,7 +75,7 @@ const UpdateGroupChatModal = ({
       return;
     }
 
-    if (selectedChat.groupAdmin._id !== user?.existinguser?._id) {
+    if (selectedChat.groupAdmin._id !== user?.existingUser?._id) {
       alert("Unauthorized access. Only admin can add or remove members");
       return;
     }
@@ -88,7 +88,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.put(
-        "http://localhost:5000/api/chat/addtogroup",
+        "https://cloni-backend.onrender.com/api/chat/addtogroup",
         { chatId: selectedChat._id, userId: selectedUser?._id },
         config
       );
@@ -105,8 +105,8 @@ const UpdateGroupChatModal = ({
 
   const handleRemoveUser = async (selectedUser) => {
     if (
-      selectedChat.groupAdmin._id !== user?.existinguser?._id &&
-      selectedUser?._id !== user?.existinguser?._id
+      selectedChat.groupAdmin._id !== user?.existingUser?._id &&
+      selectedUser?._id !== user?.existingUser?._id
     ) {
       alert("Unauthorized access. Only admin can remove members.");
       return;
@@ -120,12 +120,12 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.put(
-        "http://localhost:5000/api/chat/removefromgroup",
+        "https://cloni-backend.onrender.com/api/chat/removefromgroup",
         { chatId: selectedChat._id, userId: selectedUser?._id },
         config
       );
 
-      if (selectedUser?._id === user?.existinguser?._id) {
+      if (selectedUser?._id === user?.existingUser?._id) {
         alert(`You are leaving the group ${selectedChat.chatName}`);
         setSelectedChat();
         hideUpdateModal();
@@ -158,7 +158,7 @@ const UpdateGroupChatModal = ({
         },
       };
       const response = await axios.put(
-        "http://localhost:5000/api/chat/rename",
+        "https://cloni-backend.onrender.com/api/chat/rename",
         { id: selectedChat._id, name: groupchatName },
         config
       );

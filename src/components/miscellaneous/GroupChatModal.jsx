@@ -44,7 +44,7 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
 
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/user?search=${query}`,
+        `https://cloni-backend.onrender.com/api/user?search=${query}`,
         config
       );
       setLoading(false);
@@ -78,6 +78,9 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
       alert("Select users for group chat");
       return;
     }
+
+    console.log("selected users", selectedUsers);
+
     try {
       const config = {
         headers: {
@@ -86,10 +89,10 @@ const GroupChatModal = ({ children, hideGroupChatModal }) => {
       };
 
       const response = await axios.post(
-        "http://localhost:5000/api/chat/group",
+        "https://cloni-backend.onrender.com/api/chat/group",
         {
           name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((u) => u._id)),
+          users: selectedUsers.map((u) => u._id),
         },
         config
       );

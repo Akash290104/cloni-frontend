@@ -59,7 +59,7 @@ const MyChats = ({ fetchAgain }) => {
           },
         };
         const response = await axios.get(
-          "http://localhost:5000/api/chat",
+          "https://cloni-backend.onrender.com/api/chat",
           config
         );
 
@@ -140,7 +140,7 @@ const MyChats = ({ fetchAgain }) => {
         },
       };
       const response = await axios.get(
-        "http://localhost:5000/api/chat",
+        "https://cloni-backend.onrender.com/api/chat",
         config
       );
 
@@ -208,7 +208,7 @@ const ChatSender = ({ name, chat }) => {
   // console.log({ chat, selectedChat });
 
   const handleChatSelect = () => {
-    setSelectedChat(chat); 
+    setSelectedChat(chat);
   };
 
   return (
@@ -217,7 +217,7 @@ const ChatSender = ({ name, chat }) => {
       onClick={handleChatSelect}
       className={`${styles.senderContainer} chatsender`}
       style={{
-        backgroundColor: chat._id === selectedChat._id ? "#32afc6" : "grey",
+        backgroundColor: chat._id === selectedChat?._id ? "#32afc6" : "grey",
       }}
     >
       {name}

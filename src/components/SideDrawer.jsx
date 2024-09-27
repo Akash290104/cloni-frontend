@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-bootstrap";
 import { FaBell } from "react-icons/fa";
 import { ChatState } from "../context/chatProvider.js";
@@ -8,7 +8,6 @@ import Modal from "./miscellaneous/Modal.jsx";
 import { useNavigate } from "react-router-dom";
 import SearchBar from "./miscellaneous/SearchBar.jsx";
 import GetSender from "../config/GetSender.js";
-import { useEffect } from "react";
 
 const SideDrawer = () => {
   const navigate = useNavigate();
@@ -60,8 +59,7 @@ const SideDrawer = () => {
     const storedNotif = localStorage.getItem("storedNotification");
     const notifications = storedNotif ? JSON.parse(storedNotif) : [];
     setStoredNotification(notifications);
-  }, []);
-
+  }, [setStoredNotification]);
   /*
   let storedNotification1 = [];
   let storedNotification = [];
@@ -111,11 +109,8 @@ console.log("Notification in sideDrawer");
     <>
       <div className="navbar">
         <div className="search">
-          <div className="search-bar">
-            <input type="search" placeholder="Search users" />
-          </div>
           <div className="search-btn">
-            <button onClick={showSearchBar}>Search</button>
+            <button onClick={showSearchBar}>Search Users</button>
           </div>
         </div>
         <div className="text">Talk-A-Tive</div>

@@ -13,22 +13,22 @@ import Lottie from "react-lottie";
 import animationData from "../animations/typing.json";
 import GetSender from "../config/GetSender";
 
-const ENDPOINT = "http://localhost:5000";
+const ENDPOINT = "https://cloni-backend.onrender.com";
 
 const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
   const {
     user,
     selectedChat,
     setSelectedChat,
-    storedNotification,
-    setStoredNotification,
+    // storedNotification,
+    // setStoredNotification,
   } = ChatState();
 
   // useEffect(() => {
   //   console.log(selectedChat);
   // }, [selectedChat]);
 
-  // console.log("selectedChat", selectedChat);
+  console.log("selectedChat", selectedChat);
 
   // console.log(user?.token);
 
@@ -59,7 +59,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
   const hideUpdateModal = () => setOpenUpdateModal(false);
 
   const fetchMessages = useCallback(async () => {
-    if (Object.keys(selectedChat).length === 0) {
+    if (selectedChat && Object.keys(selectedChat).length === 0) {
       // console.log("Selected chat is undefined");
       return;
     }
@@ -74,35 +74,40 @@ const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
 
       setLoading(true);
 
-      console.log(selectedChat._id);
+      console.log(selectedChat?._id);
 
-      const { data } = await axios.get(
-        `${ENDPOINT}/api/message/${selectedChat._id}`,
-        config
-      );
+      if (selectedChat?._id) {
+        const { data } = await axios.get(
+          `${ENDPOINT}/api/message/${selectedChat._id}`,
+          config
+        );
 
-      // console.log("data of fetchmessages", data);
+        // console.log("data of fetchmessages", data);
 
-      setMessages(data.messages);
+        setMessages(data.messages);
 
-      setLoading(false);
+        setLoading(false);
 
-      socket.emit("join chat", selectedChat._id);
+        socket.emit("join chat", selectedChat._id);
+      } else {
+        console.log("No chat selected");
+        setLoading(false);
+      }
     } catch (error) {
       console.error("Error fetching messages:", error);
       setLoading(false);
     }
   }, [selectedChat, user?.token, socket]);
 
-  const handleNotification = (newNotif) => {
-    const storedNotification1 = localStorage.getItem("storedNotification");
-    const notifications = storedNotification1
-      ? JSON.parse(storedNotification1)
-      : [];
-    const temp = [...notifications, newNotif];
-    setStoredNotification(temp);
-    localStorage.setItem("storedNotification", JSON.stringify(temp));
-  };
+  // const handleNotification = (newNotif) => {
+  //   const storedNotification1 = localStorage.getItem("storedNotification");
+  //   const notifications = storedNotification1
+  //     ? JSON.parse(storedNotification1)
+  //     : [];
+  //   const temp = [...notifications, newNotif];
+  //   setStoredNotification(temp);
+  //   localStorage.setItem("storedNotification", JSON.stringify(temp));
+  // };
 
   useEffect(() => {
     // const storedNotification1 = localStorage.getItem("storedNotification");
@@ -123,29 +128,29 @@ const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
           selectedChatRef.current?._id !==
             newMessageReceived?.newMessage?.chat?._id
         ) {
-          // console.log({selectedChat,newMessageReceived})
+          console.log({ selectedChatRef });
 
-          if (
-            !storedNotification.some(
-              (n) => n._id === newMessageReceived?.newMessage?._id
-            )
-          ) {
-            console.log(
-              storedNotification.some(
-                (n) => n._id === newMessageReceived?.newMessage?._id
-              ),
-              storedNotification
-            );
+          // if (
+          //   !storedNotification.some(
+          //     (n) => n._id === newMessageReceived?.newMessage?._id
+          //   )
+          // ) {
+          //   console.log(
+          //     storedNotification.some(
+          //       (n) => n._id === newMessageReceived?.newMessage?._id
+          //     ),
+          //     storedNotification
+          //   );
 
-            let newNotif = newMessageReceived?.newMessage;
-            // console.log(storedNotification,newNotif)
-            handleNotification(newNotif);
-            // console.log("notification step2", storedNotification);
-            // setFetchAgain(!fetchAgain);
-            // }
-          } else {
-            return;
-          }
+          //   let newNotif = newMessageReceived?.newMessage;
+          //   // console.log(storedNotification,newNotif)
+          //   handleNotification(newNotif);
+          //   // console.log("notification step2", storedNotification);
+          //   // setFetchAgain(!fetchAgain);
+          //   // }
+          // } else {
+          //   return;
+          // }
         } else {
           // console.log("messages list when message received", messages);
           setMessages([...messages, newMessageReceived.newMessage]);
@@ -330,32 +335,32 @@ const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
     }, timerLength);
   };
 
-  useEffect(() => {
-    const removeNotification = (chat) => {
-      // console.log("remove notification", notification);
-      const storedNotification1 = localStorage.getItem("storedNotification");
-      const notifications = storedNotification1
-        ? JSON.parse(storedNotification1)
-        : [];
-      const updatedNotification = notifications?.filter(
-        (notif) => notif.chat._id !== chat._id
-      );
+  // useEffect(() => {
+  //   const removeNotification = (chat) => {
+  //     // console.log("remove notification", notification);
+  //     const storedNotification1 = localStorage.getItem("storedNotification");
+  //     const notifications = storedNotification1
+  //       ? JSON.parse(storedNotification1)
+  //       : [];
+  //     const updatedNotification = notifications?.filter(
+  //       (notif) => notif.chat._id !== chat._id
+  //     );
 
-      setStoredNotification(updatedNotification);
+  //     setStoredNotification(updatedNotification);
 
-      localStorage.setItem(
-        "storedNotification",
-        JSON.stringify(updatedNotification)
-      );
-    };
+  //     localStorage.setItem(
+  //       "storedNotification",
+  //       JSON.stringify(updatedNotification)
+  //     );
+  //   };
 
-    if (Object.keys(selectedChat).length > 0) {
-      removeNotification(selectedChat);
-      // console.log("4444");
-    } else {
-      return;
-    }
-  }, [selectedChat]);
+  //   if (selectedChat && Object.keys(selectedChat).length > 0) {
+  //     removeNotification(selectedChat);
+  //     // console.log("4444");
+  //   } else {
+  //     return;
+  //   }
+  // }, [selectedChat]);
 
   return (
     <div className={styles.container}>
