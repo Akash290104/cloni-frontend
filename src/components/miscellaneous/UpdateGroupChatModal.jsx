@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "../../styling/UpdateGroupChatModal.module.scss";
 import { ChatState } from "../../context/chatProvider";
 import { ChatLoading } from "./SearchBar";
@@ -145,6 +145,18 @@ const UpdateGroupChatModal = ({
     }
   };
 
+  useEffect(() => {
+    // Set up the socket listener
+    socket.on("groupRenamed", (updatedChat) => {
+      setSelectedChat(updatedChat);
+    });
+
+    // Clean up the listener when the component unmounts
+    return () => {
+      socket.off("groupRenamed");
+    };
+  }, [socket, setSelectedChat]);
+
   const updateName = async () => {
     if (!groupchatName) {
       alert("Please enter a group chat name");
@@ -168,12 +180,8 @@ const UpdateGroupChatModal = ({
         config
       );
 
-      // socket.emit("groupRenamed", {
-      //   chatId: selectedChat._id,
-      //   newName: groupchatName,
-      // });
-
-      setSelectedChat(response.data.updatedChat);
+      let renamedChat = response.data.updatedChat;
+      setSelectedChat(() => renamedChat);
       alert("Group chat name updated");
     } catch (error) {
       console.error("Error updating group chat name", error);
