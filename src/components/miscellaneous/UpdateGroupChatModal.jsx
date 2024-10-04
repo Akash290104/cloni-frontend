@@ -165,7 +165,7 @@ const UpdateGroupChatModal = ({
         config
       );
 
-      socket.emit("groupChatNameUpdated", {
+      socket.emit("groupRenamed", {
         chatId: selectedChat._id,
         newName: groupchatName,
       });
