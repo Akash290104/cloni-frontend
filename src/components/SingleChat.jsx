@@ -413,6 +413,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain, socket, socketConnected }) => {
                 fetchAgain={fetchAgain}
                 setFetchAgain={setFetchAgain}
                 fetchMessages={fetchMessages}
+                socket={socket}
               />
             )}
           </div>
