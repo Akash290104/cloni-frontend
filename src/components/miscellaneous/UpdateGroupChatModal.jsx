@@ -179,9 +179,10 @@ const UpdateGroupChatModal = ({
         { id: selectedChat._id, name: groupchatName },
         config
       );
-
-      let renamedChat = response.data.updatedChat;
-      setSelectedChat(() => renamedChat);
+       console.log(response);
+ 
+      // let renamedChat = response.data.updatedChat;
+      // setSelectedChat(() => renamedChat);
       alert("Group chat name updated");
     } catch (error) {
       console.error("Error updating group chat name", error);
