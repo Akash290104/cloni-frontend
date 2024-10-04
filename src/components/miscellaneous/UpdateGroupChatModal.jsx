@@ -159,6 +159,7 @@ const UpdateGroupChatModal = ({
           Authorization: `Bearer ${user?.token}`,
         },
       };
+      
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/rename",
         { id: selectedChat._id, name: groupchatName },
