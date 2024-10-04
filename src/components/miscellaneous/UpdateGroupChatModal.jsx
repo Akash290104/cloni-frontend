@@ -33,7 +33,7 @@ const UpdateGroupChatModal = ({
   fetchAgain,
   setFetchAgain,
   fetchMessages,
-  socket
+  socket,
 }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
   const [groupchatName, setGroupChatName] = useState("");
@@ -159,7 +159,9 @@ const UpdateGroupChatModal = ({
           Authorization: `Bearer ${user?.token}`,
         },
       };
-      
+
+      console.log(selectedChat._id, groupchatName);
+
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/rename",
         { id: selectedChat._id, name: groupchatName },
@@ -170,10 +172,9 @@ const UpdateGroupChatModal = ({
       //   chatId: selectedChat._id,
       //   newName: groupchatName,
       // });
-      
+
       setSelectedChat(response.data.updatedChat);
       alert("Group chat name updated");
-      window.location.reload();
     } catch (error) {
       console.error("Error updating group chat name", error);
       alert("Error updating group chat name");
