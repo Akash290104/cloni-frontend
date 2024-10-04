@@ -147,9 +147,11 @@ const UpdateGroupChatModal = ({
 
   useEffect(() => {
     // Set up the socket listener
+    console.log("Socket connection status:", socket);
+
     socket.on("groupRenamed", (updatedChat) => {
       console.log("socket");
-
+      console.log(updatedChat);
       setSelectedChat(() => updatedChat);
     });
 
@@ -173,7 +175,6 @@ const UpdateGroupChatModal = ({
           Authorization: `Bearer ${user?.token}`,
         },
       };
-
 
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/rename",
