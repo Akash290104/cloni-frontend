@@ -95,6 +95,7 @@ const UpdateGroupChatModal = ({
       setSelectedChat(response.data.added);
       setFetchAgain((prev) => !prev);
       alert("New user added");
+      window.location.reload();
     } catch (error) {
       console.error("Error adding the selected user to the group", error);
       alert("Error adding the selected user to the group");
@@ -132,6 +133,7 @@ const UpdateGroupChatModal = ({
       } else {
         setSelectedChat(response.data.removed);
         alert("User removed from the group");
+        window.location.reload();
       }
       setFetchAgain((prev) => !prev);
       fetchMessages();
@@ -165,6 +167,7 @@ const UpdateGroupChatModal = ({
 
       setSelectedChat(response.data.updatedChat);
       alert("Group chat name updated");
+      window.location.reload();
     } catch (error) {
       console.error("Error updating group chat name", error);
       alert("Error updating group chat name");
