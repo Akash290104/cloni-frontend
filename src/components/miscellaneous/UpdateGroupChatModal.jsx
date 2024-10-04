@@ -33,6 +33,7 @@ const UpdateGroupChatModal = ({
   fetchAgain,
   setFetchAgain,
   fetchMessages,
+  socket
 }) => {
   const { user, selectedChat, setSelectedChat } = ChatState();
   const [groupchatName, setGroupChatName] = useState("");
