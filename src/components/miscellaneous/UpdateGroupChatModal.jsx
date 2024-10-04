@@ -148,7 +148,9 @@ const UpdateGroupChatModal = ({
   useEffect(() => {
     // Set up the socket listener
     socket.on("groupRenamed", (updatedChat) => {
-      setSelectedChat(updatedChat);
+      console.log("socket");
+
+      setSelectedChat(() => updatedChat);
     });
 
     // Clean up the listener when the component unmounts
@@ -172,15 +174,14 @@ const UpdateGroupChatModal = ({
         },
       };
 
-      console.log(selectedChat._id, groupchatName);
 
       const response = await axios.put(
         "https://cloni-backend.onrender.com/api/chat/rename",
         { id: selectedChat._id, name: groupchatName },
         config
       );
-       console.log(response);
- 
+      console.log(response);
+
       // let renamedChat = response.data.updatedChat;
       // setSelectedChat(() => renamedChat);
       alert("Group chat name updated");
